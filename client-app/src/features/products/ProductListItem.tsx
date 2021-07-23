@@ -1,14 +1,21 @@
+import { observer } from 'mobx-react-lite';
 import React from 'react';
-import { Card, Header, Icon, Image } from 'semantic-ui-react';
+import { Button, Card, Header, Icon, Image } from 'semantic-ui-react';
 import { Product } from '../../app/models/product';
+import { useStore } from '../../app/stores/store';
+import ProductDetail from './ProductDetail';
 
 interface Props {
      product: Product
 }
 
-export default function ProductListItem({ product }: Props) {
+export default observer(function ProductListItem({ product }: Props) {
+     const { modalStore } = useStore();
+
+     if (!product) return <></>
+
      return (
-          <Card>
+          <Card fluid onClick={() => modalStore.openModal(<ProductDetail product={product}/>)}>
                <Image src={`/assets/productImages/${product.imgUri}`} wrapped ui={false} />
                <Card.Content>
                     <Card.Header>{product.name}</Card.Header>
@@ -24,4 +31,4 @@ export default function ProductListItem({ product }: Props) {
                </Card.Content>
           </Card>
      )
-}
+});

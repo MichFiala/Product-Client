@@ -1,8 +1,22 @@
-import axios, { AxiosResponse } from "axios";
+import axios, { AxiosError, AxiosResponse } from "axios";
+import { PaginatedResult } from "../models/pagination";
 import { Product } from "../models/product";
 
 axios.defaults.baseURL = 'http://localhost:5000/api';
 
+axios.interceptors.response.use(async response => {
+     const pagination = response.headers['pagination'];
+
+     if (pagination) {
+          response.data = new PaginatedResult(response.data, JSON.parse(pagination));
+
+          return response as AxiosResponse<PaginatedResult<any>>;
+     }
+
+     return response;
+}, (error: AxiosError) => {
+     console.log(error);
+});
 const responseBody = <T>(response: AxiosResponse<T>) => response.data;
 
 const requests = {
@@ -13,7 +27,7 @@ const requests = {
 }
  
 const Products = {
-     list: () => requests.get<Product[]>('/products'),
+     list: () => requests.get<PaginatedResult<Product[]>>('/products/paged'),
      details: (id: string) => requests.get<Product>(`/products/${id}`),
      update: (product: Product) => requests.put<void>(`/products/${product.id}`, product),
  }

@@ -1,28 +1,29 @@
 import React, { useEffect, useState } from 'react';
-import { Header } from 'semantic-ui-react';
+import { Card, Grid, GridColumn, Header } from 'semantic-ui-react';
 import agent from '../../app/api/agent';
+import { PaginatedResult } from '../../app/models/pagination';
 import { Product } from '../../app/models/product';
 import ProductListItem from './ProductListItem';
 
-export default function ProductList()
-{
-     const [products, setProducts] = useState<Product[]>([]);
+export default function ProductList() {
+     const [productsPaginated, setProductsPaginated] = useState<PaginatedResult<Product[]> | null>(null);
 
      useEffect(() => {
-          agent.Products.list().then(value => setProducts(value));
+          agent.Products.list().then(value => setProductsPaginated(value));
 
      }, []);
 
      return (
           <>
-               <Header content='Product List' />
-               
-               {
-                    products.map(p => (
-                         <Header key={p.id} content={p.name}/>
-                    ))
-               }
-               <ProductListItem />
+
+               <Card.Group stackable>
+
+                    {
+                         productsPaginated?.data.map(p => (
+                              <ProductListItem key={p.id} product={p} />
+                         ))
+                    }
+               </Card.Group>
           </>
      )
 }

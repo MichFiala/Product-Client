@@ -17,7 +17,7 @@ axios.interceptors.response.use(async response => {
      await sleep(1000);
 
      const pagination = response.headers['pagination'];
-
+     // If pagination header exists replace response data
      if (pagination) {
           response.data = new PaginatedResult(response.data, JSON.parse(pagination));
 
@@ -27,7 +27,7 @@ axios.interceptors.response.use(async response => {
      return response;
 }, (error: AxiosError) => {
      const { data, status, config } = error.response!;
-
+     // Handling errors
      switch (status) {
           case 400:
                if (typeof data === 'string') {

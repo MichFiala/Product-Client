@@ -30,8 +30,6 @@ export default class ProductStore{
      }
 
      updateProduct = async (product: Product) => {
-          console.log(product);
-
           this.loading = true;
 
           try {

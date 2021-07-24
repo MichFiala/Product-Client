@@ -27,7 +27,7 @@ export default observer(function ProductForm({ selectedProduct }: Props) {
      return (
           <Form>
                <Form.Field>
-                    <input name='description' value={product.description} placeholder='Description' onChange={handleInputChange} />
+                    <input name='description' value={product.description ? product.description : ""} placeholder='Description' onChange={handleInputChange} />
                </Form.Field>
                <Button
                     floated='right'

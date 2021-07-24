@@ -1,6 +1,5 @@
 import { observer } from 'mobx-react-lite';
-import React from 'react';
-import { Button, Card, Header, Icon, Image } from 'semantic-ui-react';
+import { Card, Image } from 'semantic-ui-react';
 import { Product } from '../../app/models/product';
 import { useStore } from '../../app/stores/store';
 import ProductDetail from './ProductDetail';

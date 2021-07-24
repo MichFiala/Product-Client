@@ -1,7 +1,5 @@
-import React from 'react';
-import { Button, Card, Form, Header, Image, Segment } from 'semantic-ui-react';
+import { Card, Image, Segment } from 'semantic-ui-react';
 import { Product } from '../../app/models/product';
-import modalStore from '../../app/stores/modalStore';
 import ProductForm from './form/ProductForm';
 
 interface Props {

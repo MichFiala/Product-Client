@@ -1,10 +1,8 @@
 import { observer } from 'mobx-react-lite';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroller';
-import { Button, Card, Divider, Grid, GridColumn, GridRow, Header, Loader } from 'semantic-ui-react';
-import agent from '../../app/api/agent';
-import { PaginatedResult, PagingParams } from '../../app/models/pagination';
-import { Product } from '../../app/models/product';
+import { Grid, GridRow, Loader } from 'semantic-ui-react';
+import { PagingParams } from '../../app/models/pagination';
 import { useStore } from '../../app/stores/store';
 import ProductListItem from './ProductListItem';
 

@@ -1,9 +1,7 @@
 import { makeAutoObservable, runInAction } from "mobx";
-import internal from "stream";
 import agent from "../api/agent";
-import { PaginatedResult, Pagination, PagingParams } from "../models/pagination";
+import { Pagination, PagingParams } from "../models/pagination";
 import { Product } from "../models/product";
-import ModalStore from "./modalStore";
 import { store } from "./store";
 
 export default class ProductStore{

@@ -3,12 +3,15 @@ import internal from "stream";
 import agent from "../api/agent";
 import { PaginatedResult, Pagination, PagingParams } from "../models/pagination";
 import { Product } from "../models/product";
+import ModalStore from "./modalStore";
+import { store } from "./store";
 
 export default class ProductStore{
      productsRegistry = new Map<number, Product>();
      product: Product | null = null;
      pagination: Pagination | null = null;
      pagingParams = new PagingParams();
+     loading = false;
 
      constructor() {
           makeAutoObservable(this);
@@ -25,6 +28,28 @@ export default class ProductStore{
                this.setPagination(result.pagination);
           } catch (error) {
                console.log(error);
+          }
+     }
+
+     updateProduct = async (product: Product) => {
+          console.log(product);
+
+          this.loading = true;
+
+          try {
+               await agent.Products.update(product);
+
+               runInAction(() => {
+                    this.productsRegistry.set(product.id, product);
+                    this.loading = false;
+                    store.modalStore.closeModal();
+                });
+          } catch (error) {
+               console.log(error);
+
+               runInAction(() => {
+                    this.loading = false;
+               })
           }
      }
      

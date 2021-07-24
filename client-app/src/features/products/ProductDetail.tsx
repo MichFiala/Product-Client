@@ -2,6 +2,7 @@ import React from 'react';
 import { Button, Card, Form, Header, Image, Segment } from 'semantic-ui-react';
 import { Product } from '../../app/models/product';
 import modalStore from '../../app/stores/modalStore';
+import ProductForm from './form/ProductForm';
 
 interface Props {
      product: Product
@@ -21,17 +22,7 @@ export default function ProductDetail({ product }: Props) {
                     {`${product.price}Kč`}
                </Card.Content>
                <Segment clearing>
-
-                    <Form>
-                         <Form.Field>
-                              <input name='description' value={product.description} placeholder='Description' />
-                         </Form.Field>
-                         <Button
-                              floated='right'
-                              positive
-                              type='submit'
-                              content='Save' />
-                    </Form>
+                    <ProductForm selectedProduct={product}/>
                </Segment>
           </Card>
      )

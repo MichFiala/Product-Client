@@ -4,11 +4,11 @@ import { Pagination, PagingParams } from "../models/pagination";
 import { Product } from "../models/product";
 import { store } from "./store";
 
-export default class ProductStore{
+export default class ProductStore {
      productsRegistry = new Map<number, Product>();
      product: Product | null = null;
      pagination: Pagination | null = null;
-     pagingParams = new PagingParams();
+     private pagingParams = new PagingParams();
      loading = false;
 
      constructor() {
@@ -18,12 +18,14 @@ export default class ProductStore{
      loadProducts = async () => {
           try {
                const result = await agent.Products.list(this.axiosParams);
+               runInAction(() => {
 
-               result.data.forEach(p => {
-                    this.setProduct(p);
-               })
+                    result.data.forEach(p => {
+                         this.setProduct(p);
+                    });
 
-               this.setPagination(result.pagination);
+                    this.setPagination(result.pagination);
+               });
           } catch (error) {
                console.log(error);
           }
@@ -39,7 +41,7 @@ export default class ProductStore{
                     this.productsRegistry.set(product.id, product);
                     this.loading = false;
                     store.modalStore.closeModal();
-                });
+               });
           } catch (error) {
                console.log(error);
 
@@ -48,7 +50,17 @@ export default class ProductStore{
                })
           }
      }
-     
+
+     loadNextProducts = async () => {
+          this.setPagingParams(new PagingParams(this.pagination!.currentPage + 1));
+
+          await this.loadProducts();
+     }
+
+     get hasMoreProducts() {
+          return !!this.pagination && this.pagination.currentPage < this.pagination.totalPages;
+     }
+
      setPagination = (pagination: Pagination) => {
           this.pagination = pagination;
      }
@@ -73,5 +85,5 @@ export default class ProductStore{
      private setProduct = (product: Product) => {
           this.productsRegistry.set(product.id, product);
      }
-  
+
 }

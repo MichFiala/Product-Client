@@ -2,25 +2,23 @@ import { observer } from 'mobx-react-lite';
 import { useEffect, useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroller';
 import { Grid, GridRow, Loader } from 'semantic-ui-react';
-import { PagingParams } from '../../app/models/pagination';
 import { useStore } from '../../app/stores/store';
 import ProductListItem from './ProductListItem';
 
 export default observer(function ProductList() {
      const { productStore } = useStore();
-     const { products, loadProducts, setPagingParams, pagination } = productStore;
+     const { products, loadProducts, loadNextProducts, hasMoreProducts } = productStore;
      const [loadingNext, setLoadingNext] = useState(false);
 
      function handleGetNext() {
           setLoadingNext(true);
-          setPagingParams(new PagingParams(pagination!.currentPage + 1));
-          loadProducts().then(() => setLoadingNext(false));
+          loadNextProducts()
+               .then(() => setLoadingNext(false));
      }
 
      useEffect(() => {
           loadProducts();
-     }, [productStore, loadProducts]);
-
+     }, [loadProducts]);
 
      return (
           <>
@@ -30,7 +28,9 @@ export default observer(function ProductList() {
                          <InfiniteScroll
                               pageStart={0}
                               loadMore={handleGetNext}
-                              hasMore={!loadingNext && !!pagination && pagination.currentPage < pagination.totalPages}
+                              hasMore={
+                                   // !loadingNext &&
+                                   hasMoreProducts}
                               initialLoad={false}
                          >
                               {
